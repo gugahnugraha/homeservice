@@ -1,0 +1,348 @@
+// Prisma Schema for Home Services Marketplace
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// User Roles
+enum Role {
+  CUSTOMER
+  PROVIDER
+  ADMIN
+}
+
+// Provider Availability Statuses
+enum AvailabilityStatus {
+  ONLINE
+  OFFLINE
+  BUSY
+  ON_VACATION
+}
+
+// Provider Verification Statuses
+enum VerificationStatus {
+  UNVERIFIED
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+// Service Pricing Models
+enum PriceModel {
+  FIXED_PRICE
+  STARTING_FROM
+  HOURLY
+  QUOTATION
+  CUSTOM_PRICE
+}
+
+// Booking Status Lifecycle
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  PROVIDER_ASSIGNED
+  PROVIDER_ACCEPTED
+  ON_THE_WAY
+  ARRIVED
+  IN_PROGRESS
+  COMPLETED
+  CUSTOMER_CONFIRMED
+  CANCELLED_BY_CUSTOMER
+  CANCELLED_BY_PROVIDER
+  CANCELLED_BY_ADMIN
+}
+
+// Payment Statuses
+enum PaymentStatus {
+  UNPAID
+  PENDING
+  PAID
+  REFUNDED
+  FAILED
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  phone        String?
+  avatarUrl    String?
+  role         Role     @default(CUSTOMER)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Role Profiles
+  customerProfile CustomerProfile?
+  providerProfile ProviderProfile?
+
+  // Notifications
+  notifications Notification[]
+
+  @@index([email])
+  @@index([role])
+}
+
+model CustomerProfile {
+  id               String   @id @default(uuid())
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  defaultAddressId String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  addresses Address[]
+  bookings  Booking[]
+  reviews   Review[]
+}
+
+model ProviderProfile {
+  id                 String             @id @default(uuid())
+  userId             String             @unique
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bio                String?
+  yearsExperience    Int                @default(1)
+  availabilityStatus AvailabilityStatus @default(OFFLINE)
+  verificationStatus VerificationStatus @default(UNVERIFIED)
+  ratingAvg          Float              @default(0.0)
+  totalJobs          Int                @default(0)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  verifications ProviderVerification[]
+  services      ProviderService[]
+  serviceAreas  ServiceArea[]
+  bookings      Booking[]
+  reviews       Review[]
+
+  @@index([verificationStatus])
+  @@index([availabilityStatus])
+}
+
+model ProviderVerification {
+  id           String             @id @default(uuid())
+  providerId   String
+  provider     ProviderProfile    @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  documentType String             // e.g., KTP, ID_CARD, BUSINESS_LICENSE, CERTIFICATE
+  documentUrl  String
+  idNumber     String?
+  status       VerificationStatus @default(PENDING)
+  adminNotes   String?
+  reviewedAt   DateTime?
+  createdAt    DateTime           @default(now())
+}
+
+model ServiceCategory {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  icon        String?  // Lucide icon identifier or image path
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  services Service[]
+
+  @@index([slug])
+  @@index([isActive])
+}
+
+model Service {
+  id              String          @id @default(uuid())
+  categoryId      String
+  category        ServiceCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  name            String
+  slug            String          @unique
+  description     String?
+  basePrice       Float
+  priceModel      PriceModel      @default(FIXED_PRICE)
+  durationMinutes Int             @default(60)
+  isActive        Boolean         @default(true)
+  sortOrder       Int             @default(0)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  providerServices ProviderService[]
+  bookings         Booking[]
+  reviews          Review[]
+
+  @@index([categoryId])
+  @@index([slug])
+}
+
+model ProviderService {
+  id          String          @id @default(uuid())
+  providerId  String
+  provider    ProviderProfile @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  serviceId   String
+  service     Service         @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  customPrice Float?
+  isAvailable Boolean         @default(true)
+  createdAt   DateTime        @default(now())
+
+  @@unique([providerId, serviceId])
+}
+
+model ServiceArea {
+  id                String          @id @default(uuid())
+  providerId        String
+  provider          ProviderProfile @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  city              String
+  region            String?
+  postalCode        String?
+  coverageRadiusKm  Float           @default(15.0)
+  createdAt         DateTime        @default(now())
+
+  @@index([city])
+  @@index([providerId])
+}
+
+model Address {
+  id          String          @id @default(uuid())
+  customerId  String
+  customer    CustomerProfile @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  label       String          @default("Home") // Home, Office, Parents, etc.
+  fullAddress String
+  city        String
+  region      String?
+  postalCode  String?
+  latitude    Float?
+  longitude   Float?
+  isDefault   Boolean         @default(false)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  bookings Booking[]
+
+  @@index([customerId])
+  @@index([city])
+}
+
+model Booking {
+  id               String        @id @default(uuid())
+  bookingNumber    String        @unique // e.g. BK-20260723-8901
+  customerId       String
+  customer         CustomerProfile @relation(fields: [customerId], references: [id])
+  providerId       String?
+  provider         ProviderProfile? @relation(fields: [providerId], references: [id])
+  serviceId        String
+  service          Service       @relation(fields: [serviceId], references: [id])
+  addressId        String
+  address          Address       @relation(fields: [addressId], references: [id])
+  
+  scheduledDate    DateTime
+  scheduledTime    String        // e.g. "10:00 AM - 12:00 PM"
+  customerNotes    String?
+  
+  price            Float
+  commissionRate   Float         @default(0.15)
+  commissionAmount Float         @default(0.0)
+  providerEarnings Float         @default(0.0)
+
+  paymentStatus    PaymentStatus @default(UNPAID)
+  bookingStatus    BookingStatus @default(PENDING)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  attachments   BookingAttachment[]
+  statusHistory BookingStatusHistory[]
+  payments      Payment[]
+  review        Review?
+
+  @@index([customerId])
+  @@index([providerId])
+  @@index([bookingStatus])
+  @@index([bookingNumber])
+}
+
+model BookingAttachment {
+  id             String   @id @default(uuid())
+  bookingId      String
+  booking        Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  fileUrl        String
+  fileType       String   @default("IMAGE") // IMAGE, VIDEO, DOCUMENT
+  uploadedByRole Role     @default(CUSTOMER)
+  createdAt      DateTime @default(now())
+
+  @@index([bookingId])
+}
+
+model BookingStatusHistory {
+  id             String        @id @default(uuid())
+  bookingId      String
+  booking        Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  previousStatus BookingStatus?
+  newStatus      BookingStatus
+  actorId        String
+  actorRole      Role
+  note           String?
+  createdAt      DateTime      @default(now())
+
+  @@index([bookingId])
+}
+
+model Payment {
+  id               String        @id @default(uuid())
+  bookingId        String
+  booking          Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  amount           Float
+  paymentMethod    String        // BANK_TRANSFER, E_WALLET, CREDIT_CARD, QRIS, CASH
+  paymentProvider  String        @default("mock")
+  paymentReference String?
+  status           PaymentStatus @default(PENDING)
+  paidAt           DateTime?
+  createdAt        DateTime      @default(now())
+
+  @@index([bookingId])
+}
+
+model Review {
+  id           String          @id @default(uuid())
+  bookingId    String          @unique
+  booking      Booking         @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  customerId   String
+  customer     CustomerProfile @relation(fields: [customerId], references: [id])
+  providerId   String
+  provider     ProviderProfile @relation(fields: [providerId], references: [id])
+  serviceId    String
+  service      Service         @relation(fields: [serviceId], references: [id])
+
+  rating       Int             // 1 to 5 stars
+  comment      String?
+  responseText String?         // Provider reply
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  @@index([providerId])
+  @@index([serviceId])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      String   @default("INFO") // BOOKING, SYSTEM, ACCOUNT, PAYMENT
+  isRead    Boolean  @default(false)
+  linkUrl   String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([isRead])
+}
+
+model PlatformSetting {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String
+  description String?
+  updatedAt   DateTime @updatedAt
+}
