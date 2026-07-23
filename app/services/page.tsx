@@ -64,7 +64,7 @@ function ServiceCatalogContent() {
           Katalog Jasa & Layanan Rumah
         </h1>
         <p className="text-slate-500 text-sm sm:text-base">
-          Temukan teknisi dan profesional terverifikasi dengan rincian harga transparan tanpa biaya tersembunyi
+          Temukan mitra dan profesional terverifikasi dengan rincian harga transparan tanpa biaya tersembunyi
         </p>
 
         {/* Live Search */}

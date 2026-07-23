@@ -116,7 +116,7 @@ export default function ServiceDetailPage() {
             <CardContent className="p-6 space-y-3 text-xs text-slate-600 dark:text-slate-300">
               <div className="flex items-start gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                <span>Pemeriksaan awal dan diagnosa masalah oleh teknisi profesional.</span>
+                <span>Pemeriksaan awal dan pengerjaan oleh mitra profesional.</span>
               </div>
               <div className="flex items-start gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
@@ -151,7 +151,7 @@ export default function ServiceDetailPage() {
                   {service.priceModel === 'FIXED_PRICE' && 'Harga pas untuk pengerjaan standar.'}
                   {service.priceModel === 'STARTING_FROM' && 'Harga dasar, dapat disesuaikan dengan tingkat kesulitan lokasi.'}
                   {service.priceModel === 'HOURLY' && 'Tarif dihitung per jam waktu pengerjaan.'}
-                  {service.priceModel === 'QUOTATION' && 'Biaya akhir ditentukan setelah survei teknisi.'}
+                  {service.priceModel === 'QUOTATION' && 'Biaya akhir ditentukan setelah survei lokasi oleh mitra.'}
                 </span>
               </div>
 

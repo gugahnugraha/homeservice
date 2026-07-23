@@ -19,6 +19,7 @@ export interface UpdateBookingStatusInput {
   actorId: string;
   actorRole: Role;
   note?: string;
+  attachments?: string[]; // E.g. Proof of completion URLs from Cloudflare R2
 }
 
 /**
@@ -131,6 +132,17 @@ export async function updateBookingStatus(input: UpdateBookingStatusInput) {
         note: input.note || `Status berubah ke ${input.newStatus}`,
       },
     });
+
+    if (input.attachments && input.attachments.length > 0) {
+      await tx.bookingAttachment.createMany({
+        data: input.attachments.map((url) => ({
+          bookingId: input.bookingId,
+          fileUrl: url,
+          fileType: 'IMAGE',
+          uploadedByRole: input.actorRole,
+        })),
+      });
+    }
 
     return booking;
   });

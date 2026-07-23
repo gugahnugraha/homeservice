@@ -55,7 +55,7 @@ export async function PATCH(
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const { id } = await params;
-    const { newStatus, note } = await request.json();
+    const { newStatus, note, attachments } = await request.json();
 
     if (!newStatus || !Object.values(BookingStatus).includes(newStatus)) {
       return NextResponse.json({ error: 'Valid newStatus is required' }, { status: 400 });
@@ -67,6 +67,7 @@ export async function PATCH(
       actorId: session.userId,
       actorRole: session.role,
       note,
+      attachments,
     });
 
     return NextResponse.json({

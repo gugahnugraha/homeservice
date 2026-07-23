@@ -1,5 +1,1 @@
-{
-  "/api/services/[slug]/route": "app/api/services/[slug]/route.js",
-  "/login/page": "app/login/page.js",
-  "/services/[slug]/page": "app/services/[slug]/page.js"
-}
+{}

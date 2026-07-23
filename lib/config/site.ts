@@ -31,7 +31,7 @@ export const siteConfig: SiteConfig = {
   name: process.env.NEXT_PUBLIC_APP_NAME || "HomeFix Marketplace",
   shortName: "HomeFix",
   tagline: process.env.NEXT_PUBLIC_APP_TAGLINE || "Solusi Jasa Rumah Tangga, Perbaikan & Perawatan Terpercaya",
-  description: "Pesan tukang ledeng, teknisi listrik, jasa cuci rumah, servis AC, dan teknisi profesional terverifikasi dalam hitungan detik dengan harga transparan dan garansi kepuasan.",
+  description: "Pesan jasa profesional, mitra ahli listrik, jasa pembersih rumah, pengasuh anak, dan mitra terverifikasi lainnya dalam hitungan detik dengan harga transparan dan garansi kepuasan.",
   url: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
   defaultCity: process.env.NEXT_PUBLIC_DEFAULT_CITY || "Jakarta",
   
@@ -52,7 +52,7 @@ export const siteConfig: SiteConfig = {
   navItems: [
     { label: "Cari Layanan", href: "/services" },
     { label: "Cara Kerja", href: "/#how-it-works" },
-    { label: "Jadi Mitra Teknisi", href: "/provider/register" },
+    { label: "Jadi Mitra", href: "/provider/register" },
   ],
 
   supportedCities: [

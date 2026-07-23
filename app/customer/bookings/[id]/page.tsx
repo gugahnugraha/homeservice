@@ -85,7 +85,7 @@ export default function BookingTrackingPage() {
   const steps = [
     { status: 'PENDING', label: 'Pesanan Dibuat' },
     { status: 'CONFIRMED', label: 'Dikonfirmasi' },
-    { status: 'PROVIDER_ASSIGNED', label: 'Teknisi Ditugaskan' },
+    { status: 'PROVIDER_ASSIGNED', label: 'Mitra Ditugaskan' },
     { status: 'IN_PROGRESS', label: 'Dalam Pengerjaan' },
     { status: 'COMPLETED', label: 'Selesai' },
   ];

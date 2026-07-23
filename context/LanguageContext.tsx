@@ -13,7 +13,7 @@ const dictionaries: Record<LanguageCode, Translations> = {
     // Header & Navigation
     findServices: 'Cari Layanan',
     howItWorks: 'Cara Kerja',
-    becomeProvider: 'Jadi Mitra Teknisi',
+    becomeProvider: 'Jadi Mitra',
     login: 'Masuk',
     register: 'Daftar Sekarang',
     serviceArea: 'Area Layanan:',
@@ -21,7 +21,7 @@ const dictionaries: Record<LanguageCode, Translations> = {
     // Hero Section
     heroBadge: '✨ Marketplace Jasa Rumah Terpercaya',
     heroTitle: 'Butuh bantuan apa untuk rumah Anda hari ini?',
-    heroTagline: 'Teknisi & profesional terverifikasi untuk perbaikan, pembersihan, dan perawatan rumah Anda dengan harga transparan.',
+    heroTagline: 'Mitra & profesional terverifikasi untuk perbaikan, pembersihan, dan perawatan rumah Anda dengan harga transparan.',
     searchPlaceholder: 'Cari misal "keran bocor", "cuci AC", "cuci sofa"...',
     searchButton: 'Cari',
     popularKeywords: 'Populer:',
@@ -47,10 +47,10 @@ const dictionaries: Record<LanguageCode, Translations> = {
     guaranteeDesc: 'Pembayaran baru diteruskan setelah Anda mengonfirmasi pekerjaan telah selesai dengan baik.',
 
     // Provider CTA
-    providerCtaBadge: 'Apakah Anda Teknisi atau Usaha Jasa?',
+    providerCtaBadge: 'Apakah Anda Penyedia Jasa atau Usaha Layanan?',
     providerCtaTitle: 'Tingkatkan Pendapatan Anda Bersama Kami',
     providerCtaDesc: 'Hubungi ribuan pelanggan yang membutuhkan jasa Anda. Jam kerja fleksibel dan komisi transparan.',
-    registerAsProvider: 'Daftar Sebagai Mitra Teknisi',
+    registerAsProvider: 'Daftar Sebagai Mitra',
 
     // Footer
     footerRights: 'Hak cipta dilindungi undang-undang.',

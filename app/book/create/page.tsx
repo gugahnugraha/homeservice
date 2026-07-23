@@ -215,7 +215,7 @@ function BookingWizardContent() {
           <CardHeader>
             <CardTitle className="text-base font-bold flex items-center gap-2">
               <Calendar className="w-4 h-4 text-brand-500" />
-              <span>Langkah 1: Pilih Tanggal & Waktu Kedatangan Teknisi</span>
+              <span>Langkah 1: Pilih Tanggal & Waktu Kedatangan Mitra</span>
             </CardTitle>
           </CardHeader>
           <CardContent className="p-6 space-y-6">
@@ -334,7 +334,7 @@ function BookingWizardContent() {
               <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Catatan Masalah (Opsional)</label>
               <textarea
                 rows={3}
-                placeholder="Jelaskan kondisi kerusakan atau instruksi khusus untuk teknisi..."
+                placeholder="Jelaskan kondisi kerusakan atau instruksi khusus untuk mitra..."
                 value={customerNotes}
                 onChange={(e) => setCustomerNotes(e.target.value)}
                 className="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-sm text-slate-900 dark:text-white shadow-sm focus:outline-none"
