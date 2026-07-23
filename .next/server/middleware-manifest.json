@@ -10,16 +10,8 @@
       "page": "/",
       "matchers": [
         {
-          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/customer(?:\\/((?:[^\\/#\\?]+?)(?:\\/(?:[^\\/#\\?]+?))*))?(\\.json|\\.rsc|\\.segments\\/.+\\.segment\\.rsc)?[\\/#\\?]?$",
-          "originalSource": "/customer/:path*"
-        },
-        {
-          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/provider(?:\\/((?:[^\\/#\\?]+?)(?:\\/(?:[^\\/#\\?]+?))*))?(\\.json|\\.rsc|\\.segments\\/.+\\.segment\\.rsc)?[\\/#\\?]?$",
-          "originalSource": "/provider/:path*"
-        },
-        {
-          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/admin(?:\\/((?:[^\\/#\\?]+?)(?:\\/(?:[^\\/#\\?]+?))*))?(\\.json|\\.rsc|\\.segments\\/.+\\.segment\\.rsc)?[\\/#\\?]?$",
-          "originalSource": "/admin/:path*"
+          "regexp": "^/.*$",
+          "originalSource": "/:path*"
         }
       ],
       "wasm": [
@@ -30,11 +22,11 @@
       ],
       "assets": [],
       "env": {
-        "__NEXT_BUILD_ID": "zO-nXOmUmu_Vl7P1Dr32b",
-        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "1F2DNaDR6GbmuPUpAS+xzCIz1ixnd1ruHZKN7p4pt98=",
-        "__NEXT_PREVIEW_MODE_ID": "7684f7f27914cfcefae7bd0c1852881a",
-        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "956380c6db4a047d906221348a58816288cccdc71882c4e115ca21b92f9a9059",
-        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "41a7dc15735ac2ac3ca36b17f35084f2307e8c272f795805aac137d019014ad6"
+        "__NEXT_BUILD_ID": "development",
+        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "NhGhIlHOfiYQyGN18DzJ4H+5QNpSdcbbXdZPtcpyB/Q=",
+        "__NEXT_PREVIEW_MODE_ID": "191a65fe836a6904b73a22bfe64023cd",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "62b258c87a5a7734753183786a1accc3c1d4b86b29f0bd8e3134ef5083d2eaa1",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "28161885dc326aa09a47ec82437d0a3e1d45a6055ce95fa000318bfe69bf12f7"
       }
     }
   },
