@@ -23,6 +23,7 @@ import siteConfig from '../lib/config/site';
 import Button from '../components/ui/Button';
 import Card, { CardContent } from '../components/ui/Card';
 import Badge from '../components/ui/Badge';
+import { useLanguage } from '../context/LanguageContext';
 
 interface CategoryItem {
   id: string;
@@ -47,6 +48,7 @@ interface PopularService {
 
 export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const { t } = useLanguage();
 
   const categories: CategoryItem[] = [
     {
@@ -172,15 +174,15 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto text-center space-y-6 relative z-10">
           
           <Badge variant="primary" className="bg-brand-500/20 text-brand-200 border-brand-400/30 px-4 py-1 text-xs sm:text-sm">
-            ✨ Verified Home Services Marketplace in {siteConfig.defaultCity}
+            {t('heroBadge')}
           </Badge>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
-            What do you need <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-300 to-amber-300">help with today?</span>
+            {t('heroTitle')}
           </h1>
 
           <p className="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto font-normal leading-relaxed">
-            {siteConfig.tagline}
+            {t('heroTagline')}
           </p>
 
           {/* Hero Search Box */}
@@ -189,19 +191,19 @@ export default function HomePage() {
               <Search className="w-5 h-5 text-slate-400 ml-3 shrink-0" />
               <input
                 type="text"
-                placeholder='Search e.g. "keran bocor", "AC cleaning", "cuci sofa"...'
+                placeholder={t('searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full px-4 py-3 text-sm sm:text-base font-medium placeholder-slate-400 focus:outline-none"
               />
               <Button variant="primary" size="md" className="shrink-0 px-6 font-semibold">
-                Search
+                {t('searchButton')}
               </Button>
             </form>
 
             <div className="flex flex-wrap items-center justify-center gap-2 mt-4 text-xs text-slate-300">
-              <span className="font-medium text-slate-400">Popular:</span>
-              {['AC Cleaning', 'Faucet Repair', 'Deep Cleaning', 'Furniture Assembly'].map((term) => (
+              <span className="font-medium text-slate-400">{t('popularKeywords')}</span>
+              {['Cuci AC', 'Keran Bocor', 'Deep Cleaning', 'Pasang Lampu'].map((term) => (
                 <button
                   key={term}
                   onClick={() => setSearchQuery(term)}
@@ -221,10 +223,10 @@ export default function HomePage() {
         <div className="flex items-end justify-between mb-8">
           <div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Explore Service Categories
+              {t('categoriesTitle')}
             </h2>
             <p className="text-slate-500 text-sm mt-1">
-              Find verified, background-checked professionals for all your home needs
+              {t('categoriesSubtitle')}
             </p>
           </div>
         </div>
@@ -255,7 +257,7 @@ export default function HomePage() {
                     </div>
 
                     <div className="flex items-center gap-1 text-xs font-semibold text-brand-600 dark:text-brand-400 group-hover:underline">
-                      <span>Book Service</span>
+                      <span>{t('bookService')}</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </div>
                   </CardContent>
@@ -271,10 +273,10 @@ export default function HomePage() {
         <div className="flex items-end justify-between mb-8">
           <div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Most Requested Services
+              {t('popularTitle')}
             </h2>
             <p className="text-slate-500 text-sm mt-1">
-              Top-rated solutions backed by customer reviews and transparent pricing
+              {t('popularSubtitle')}
             </p>
           </div>
         </div>
@@ -314,7 +316,7 @@ export default function HomePage() {
 
                 <Link href={`/book/${service.id}`} className="block w-full pt-2">
                   <Button variant="outline" className="w-full justify-center text-xs">
-                    View Details & Book
+                    {t('viewDetails')}
                   </Button>
                 </Link>
               </CardContent>
@@ -327,8 +329,8 @@ export default function HomePage() {
       <section className="bg-slate-900 text-white py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
-            <h2 className="text-3xl font-extrabold">Why Homeowners Trust {siteConfig.shortName}</h2>
-            <p className="text-slate-400 text-sm">Built for convenience, safety, and guaranteed quality craftsmanship</p>
+            <h2 className="text-3xl font-extrabold">{t('whyTitle')}</h2>
+            <p className="text-slate-400 text-sm">{t('whySubtitle')}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -336,9 +338,9 @@ export default function HomePage() {
               <div className="w-12 h-12 rounded-xl bg-brand-500/20 text-brand-400 flex items-center justify-center">
                 <ShieldCheck className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-white">Vetted & Verified Professionals</h3>
+              <h3 className="text-lg font-bold text-white">{t('vettingTitle')}</h3>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Every service provider submits identity verification, background check documentation, and skill assessment before accepting customer jobs.
+                {t('vettingDesc')}
               </p>
             </div>
 
@@ -346,9 +348,9 @@ export default function HomePage() {
               <div className="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center">
                 <Tag className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-white">Upfront & Transparent Pricing</h3>
+              <h3 className="text-lg font-bold text-white">{t('pricingTitle')}</h3>
               <p className="text-xs text-slate-400 leading-relaxed">
-                No hidden costs. View estimated costs, hourly rates, or fixed package prices upfront before confirming your booking.
+                {t('pricingDesc')}
               </p>
             </div>
 
@@ -356,9 +358,9 @@ export default function HomePage() {
               <div className="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-white">Service Guarantee & Dispute Support</h3>
+              <h3 className="text-lg font-bold text-white">{t('guaranteeTitle')}</h3>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Payment is only completed after you confirm job completion. Platform dispute mediation ensures total peace of mind.
+                {t('guaranteeDesc')}
               </p>
             </div>
           </div>
@@ -370,18 +372,18 @@ export default function HomePage() {
         <div className="bg-gradient-to-r from-brand-600 to-slate-900 rounded-3xl p-8 sm:p-12 text-white flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl">
           <div className="space-y-3 max-w-xl">
             <span className="text-xs font-bold text-brand-300 uppercase tracking-widest">
-              Are you a Technician or Service Business?
+              {t('providerCtaBadge')}
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold leading-tight">
-              Grow your income with {siteConfig.name}
+              {t('providerCtaTitle')}
             </h2>
             <p className="text-slate-300 text-sm">
-              Connect with thousands of customers in {siteConfig.defaultCity}. Flexible working hours, transparent commissions, and direct payouts.
+              {t('providerCtaDesc')}
             </p>
           </div>
           <Link href="/provider/register">
             <Button variant="accent" size="lg" className="shrink-0 font-bold">
-              Register as Service Provider
+              {t('registerAsProvider')}
             </Button>
           </Link>
         </div>

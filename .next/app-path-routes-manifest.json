@@ -1,4 +1,15 @@
 {
   "/_not-found/page": "/_not-found",
-  "/page": "/"
+  "/api/auth/login/route": "/api/auth/login",
+  "/api/auth/logout/route": "/api/auth/logout",
+  "/api/auth/me/route": "/api/auth/me",
+  "/api/auth/register/route": "/api/auth/register",
+  "/api/user/profile/route": "/api/user/profile",
+  "/customer/profile/page": "/customer/profile",
+  "/login/page": "/login",
+  "/admin/login/page": "/admin/login",
+  "/provider/profile/page": "/provider/profile",
+  "/page": "/",
+  "/provider/register/page": "/provider/register",
+  "/register/page": "/register"
 }
