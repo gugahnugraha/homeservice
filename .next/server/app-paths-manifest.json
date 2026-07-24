@@ -1,4 +1,9 @@
 {
+  "/api/categories/route": "app/api/categories/route.js",
+  "/api/settings/ui/route": "app/api/settings/ui/route.js",
+  "/api/auth/me/route": "app/api/auth/me/route.js",
+  "/api/customer/addresses/route": "app/api/customer/addresses/route.js",
+  "/api/services/route": "app/api/services/route.js",
   "/page": "app/page.js",
   "/services/page": "app/services/page.js",
   "/book/create/page": "app/book/create/page.js"

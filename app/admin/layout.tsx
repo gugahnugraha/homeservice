@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { LayoutDashboard, Users, Settings, LogOut, Loader2, ShieldCheck } from 'lucide-react';
+import { LayoutDashboard, Users, Settings, LogOut, Loader2, ShieldCheck, Palette } from 'lucide-react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -66,6 +66,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: 'Kategori Layanan', href: '/admin/categories', icon: ShieldCheck },
     { name: 'Layanan Jasa', href: '/admin/services', icon: Settings },
     { name: 'Sengketa Pesanan', href: '/admin/disputes', icon: ShieldCheck },
+    { name: 'Tema & UI Customizer', href: '/admin/settings/ui', icon: Palette },
     { name: 'Pengaturan Global', href: '/admin/settings', icon: Settings },
   ];
 
