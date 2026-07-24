@@ -13,6 +13,7 @@ export default function ProviderProfilePage() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
+  const [reviews, setReviews] = useState<any[]>([]);
   
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -38,6 +39,13 @@ export default function ProviderProfilePage() {
           setBio(data.user.providerProfile.bio || '');
           setYearsExperience(String(data.user.providerProfile.yearsExperience || 1));
           setAvailabilityStatus(data.user.providerProfile.availabilityStatus || 'OFFLINE');
+        }
+        
+        // Fetch reviews
+        const reviewRes = await fetch('/api/provider/reviews');
+        const reviewData = await reviewRes.json();
+        if (reviewData.success) {
+          setReviews(reviewData.reviews);
         }
       } else {
         router.push('/login');
@@ -266,6 +274,35 @@ export default function ProviderProfilePage() {
               <p className="text-xs text-slate-500">
                 Your profile verification is currently <span className="font-semibold text-slate-900 dark:text-white">{profile?.verificationStatus || 'PENDING'}</span>. Verified providers receive 3x more customer booking requests.
               </p>
+            </CardContent>
+          </Card>
+
+          {/* Recent Reviews Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base font-bold flex items-center gap-2">
+                <Star className="w-4 h-4 text-amber-500 fill-current" />
+                Ulasan Pelanggan ({reviews.length})
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-5 max-h-80 overflow-y-auto space-y-4">
+              {reviews.length === 0 ? (
+                <p className="text-xs text-slate-500 text-center py-4">Belum ada ulasan.</p>
+              ) : (
+                reviews.map((rev) => (
+                  <div key={rev.id} className="border-b border-slate-100 dark:border-slate-800 pb-3 last:border-0 last:pb-0">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-bold text-xs text-slate-900 dark:text-white">{rev.customer?.user?.name || 'Pelanggan'}</span>
+                      <div className="flex items-center text-amber-400">
+                        {[...Array(rev.rating)].map((_, i) => <Star key={i} className="w-3 h-3 fill-current" />)}
+                      </div>
+                    </div>
+                    <p className="text-[10px] text-brand-600 mb-1">{rev.service?.name}</p>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 italic">"{rev.comment}"</p>
+                    <p className="text-[10px] text-slate-400 mt-1">{new Date(rev.createdAt).toLocaleDateString('id-ID')}</p>
+                  </div>
+                ))
+              )}
             </CardContent>
           </Card>
         </div>

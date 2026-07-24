@@ -12,9 +12,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
+  const isLoginPage = pathname === '/admin/login';
+
   useEffect(() => {
-    fetchProfile();
-  }, []);
+    if (!isLoginPage) {
+      fetchProfile();
+    } else {
+      setLoading(false);
+    }
+  }, [isLoginPage]);
 
   const fetchProfile = async () => {
     try {
@@ -38,6 +44,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     router.push('/admin/login');
     router.refresh();
   };
+
+  if (isLoginPage) {
+    return <>{children}</>;
+  }
 
   if (loading || !user) {
     return (
