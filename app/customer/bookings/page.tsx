@@ -6,6 +6,8 @@ import { Clock, Calendar, MapPin, ArrowRight, Wrench, CheckCircle } from 'lucide
 import Button from '../../../components/ui/Button';
 import Card, { CardContent } from '../../../components/ui/Card';
 import { StatusBadge } from '../../../components/ui/Badge';
+import LoadingSpinner from '../../../components/ui/LoadingSpinner';
+import { FadeIn, StaggerContainer, StaggerItem } from '../../../components/ui/MotionWrapper';
 
 export default function CustomerBookingsPage() {
   const [bookings, setBookings] = useState<any[]>([]);
@@ -44,101 +46,105 @@ export default function CustomerBookingsPage() {
     return true;
   });
 
+  if (loading) {
+    return (
+      <div className="min-h-[70vh] flex items-center justify-center">
+        <LoadingSpinner size="lg" text="Memuat riwayat pesanan Anda..." />
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-4xl mx-auto px-4 py-10 space-y-8">
+    <div className="max-w-4xl mx-auto px-4 py-8 sm:py-12 space-y-8">
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Pesanan Saya</h1>
-          <p className="text-xs text-slate-500 mt-0.5">Kelola dan lacak status pengerjaan jasa rumah tangga Anda</p>
-        </div>
+      <FadeIn direction="up">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">Pesanan Saya</h1>
+            <p className="text-xs text-slate-500 mt-0.5">Kelola dan lacak status pengerjaan jasa rumah tangga Anda</p>
+          </div>
 
-        <Link href="/services">
-          <Button variant="primary" size="sm">
-            + Pesan Layanan Baru
-          </Button>
-        </Link>
-      </div>
+          <Link href="/services">
+            <Button variant="primary" size="sm" className="font-bold">
+              + Pesan Layanan Baru
+            </Button>
+          </Link>
+        </div>
+      </FadeIn>
 
       {/* Filter Tabs */}
-      <div className="flex gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
-        {[
-          { key: 'ALL', label: 'Semua Pesanan' },
-          { key: 'ACTIVE', label: 'Aktif / Berjalan' },
-          { key: 'COMPLETED', label: 'Selesai' },
-          { key: 'CANCELLED', label: 'Dibatalkan' },
-        ].map((tab) => (
+      <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
+        {['ALL', 'ACTIVE', 'COMPLETED', 'CANCELLED'].map((f) => (
           <button
-            key={tab.key}
-            onClick={() => setFilter(tab.key)}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
-              filter === tab.key
-                ? 'bg-brand-500 text-white'
-                : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+            key={f}
+            onClick={() => setFilter(f)}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              filter === f
+                ? 'bg-brand-600 text-white shadow-md'
+                : 'glass-pill text-slate-600 dark:text-slate-400 hover:text-slate-900'
             }`}
           >
-            {tab.label}
+            {f === 'ALL' && 'Semua Pesanan'}
+            {f === 'ACTIVE' && 'Sedang Berjalan'}
+            {f === 'COMPLETED' && 'Selesai'}
+            {f === 'CANCELLED' && 'Dibatalkan'}
           </button>
         ))}
       </div>
 
-      {/* Booking List */}
-      {loading ? (
-        <div className="text-center py-16">
-          <p className="text-slate-500 text-sm">Memuat daftar pesanan Anda...</p>
-        </div>
-      ) : filteredBookings.length === 0 ? (
-        <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-3">
+      {/* Bookings List */}
+      {filteredBookings.length === 0 ? (
+        <div className="text-center py-16 glass-card rounded-3xl space-y-3">
           <Wrench className="w-10 h-10 text-slate-400 mx-auto" />
-          <h3 className="font-bold text-slate-900 dark:text-white">Belum Ada Pesanan</h3>
+          <h3 className="font-bold text-slate-900 dark:text-white">Tidak Ada Pesanan</h3>
           <p className="text-xs text-slate-500 max-w-sm mx-auto">
-            Anda belum memiliki pesanan dengan status ini. Pilih layanan dari katalog untuk membuat pesanan baru.
+            Anda belum memiliki pesanan jasa dalam kategori ini. Silakan pilih layanan dari katalog.
           </p>
           <Link href="/services">
-            <Button variant="outline" size="sm">Jelajahi Katalog</Button>
+            <Button variant="outline" size="sm">Eksplor Layanan Katalog</Button>
           </Link>
         </div>
       ) : (
-        <div className="space-y-4">
-          {filteredBookings.map((booking) => (
-            <Card key={booking.id} className="hover:border-brand-300 transition-colors">
-              <CardContent className="p-6 space-y-4">
-                <div className="flex items-center justify-between flex-wrap gap-2">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-xs text-brand-600 dark:text-brand-400">{booking.bookingNumber}</span>
-                    <StatusBadge status={booking.bookingStatus} />
+        <StaggerContainer className="space-y-4">
+          {filteredBookings.map((b) => (
+            <StaggerItem key={b.id}>
+              <Card className="glass-card hover:shadow-lg transition-all border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+                <CardContent className="p-6 space-y-4">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <StatusBadge status={b.bookingStatus} />
+                    <span className="text-[11px] font-mono text-slate-400">
+                      ID: {b.id.slice(0, 8)}
+                    </span>
                   </div>
-                  <span className="text-xs text-slate-400">
-                    {new Date(booking.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
-                  </span>
-                </div>
 
-                <div>
-                  <h3 className="font-bold text-base text-slate-900 dark:text-white">{booking.service?.name}</h3>
-                  <p className="text-xs text-slate-500 mt-0.5">{booking.address?.fullAddress}, {booking.address?.city}</p>
-                </div>
-
-                <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
-                  <div className="flex items-center gap-1.5 text-slate-500">
-                    <Calendar className="w-4 h-4 text-brand-500" />
-                    <span>Jadwal: <strong>{new Date(booking.scheduledDate).toLocaleDateString('id-ID')} ({booking.scheduledTime})</strong></span>
+                  <div>
+                    <h3 className="font-extrabold text-base text-slate-900 dark:text-white">
+                      {b.service?.name}
+                    </h3>
+                    <p className="text-xs text-slate-500 mt-0.5">
+                      Jadwal: {b.scheduledDate} ({b.scheduledTime})
+                    </p>
                   </div>
-                  <span className="font-extrabold text-slate-900 dark:text-white text-sm">
-                    Rp {booking.price?.toLocaleString('id-ID')}
-                  </span>
-                </div>
 
-                <Link href={`/customer/bookings/${booking.id}`} className="block w-full">
-                  <Button variant="outline" className="w-full justify-center text-xs gap-1">
-                    <span>Lacak Progress & Detail</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+                  <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
+                    <div className="flex items-center gap-1.5 text-slate-500">
+                      <MapPin className="w-3.5 h-3.5 text-brand-500" />
+                      <span>{b.address?.label} - {b.address?.city}</span>
+                    </div>
+
+                    <Link href={`/customer/bookings/${b.id}`}>
+                      <Button variant="outline" size="sm" className="gap-1 text-xs font-bold">
+                        <span>Lacak & Detail</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       )}
 
     </div>

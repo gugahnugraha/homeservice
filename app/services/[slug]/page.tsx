@@ -3,12 +3,14 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { Clock, Tag, ShieldCheck, CheckCircle2, AlertCircle, Calendar, MapPin, ArrowLeft, Wrench } from 'lucide-react';
+import { Clock, Tag, ShieldCheck, CheckCircle2, AlertCircle, Calendar, MapPin, ArrowLeft, Wrench, Sparkles } from 'lucide-react';
 import Button from '../../../components/ui/Button';
 import Card, { CardContent, CardHeader, CardTitle } from '../../../components/ui/Card';
 import Badge from '../../../components/ui/Badge';
+import LoadingSpinner from '../../../components/ui/LoadingSpinner';
 import { FormattedService } from '../../../lib/services/serviceCatalogService';
 import siteConfig from '../../../lib/config/site';
+import { FadeIn, ScaleIn } from '../../../components/ui/MotionWrapper';
 
 export default function ServiceDetailPage() {
   const params = useParams();
@@ -41,8 +43,8 @@ export default function ServiceDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <p className="text-slate-500 text-sm">Memuat detail layanan...</p>
+      <div className="min-h-[70vh] flex items-center justify-center">
+        <LoadingSpinner size="lg" text="Memuat detail layanan profesional..." />
       </div>
     );
   }
@@ -61,7 +63,7 @@ export default function ServiceDetailPage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10 space-y-8">
+    <div className="max-w-5xl mx-auto px-4 py-8 sm:py-12 space-y-8">
       
       {/* Breadcrumb & Navigation */}
       <div className="flex items-center gap-2 text-xs text-slate-500">
@@ -79,100 +81,107 @@ export default function ServiceDetailPage() {
         
         {/* Left Column: Service Details */}
         <div className="md:col-span-2 space-y-6">
-          
-          <div className="bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-            <div className="flex items-center gap-2 flex-wrap">
-              <Badge variant="primary">{service.priceModelBadge}</Badge>
-              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                {service.categoryName}
-              </span>
+          <FadeIn direction="up">
+            <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-lg space-y-4">
+              <div className="flex items-center gap-2 flex-wrap">
+                <Badge variant="primary">{service.priceModelBadge}</Badge>
+                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                  {service.categoryName}
+                </span>
+              </div>
+
+              <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+                {service.name}
+              </h1>
+
+              <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                {service.description}
+              </p>
+
+              <div className="flex items-center gap-6 pt-4 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500">
+                <div className="flex items-center gap-1.5">
+                  <Clock className="w-4 h-4 text-brand-500" />
+                  <span>Estimasi Durasi: <strong>{service.durationMinutes} Menit</strong></span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                  <span>Garansi Resmi 100% Terjamin</span>
+                </div>
+              </div>
             </div>
+          </FadeIn>
 
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-              {service.name}
-            </h1>
-
-            <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
-              {service.description}
-            </p>
-
-            <div className="flex items-center gap-6 pt-4 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500">
-              <div className="flex items-center gap-1.5">
-                <Clock className="w-4 h-4 text-brand-500" />
-                <span>Estimasi Durasi: <strong>{service.durationMinutes} Menit</strong></span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                <span>Garansi Pengerjaan & Mitra Terverifikasi</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Included / Scope of Work */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base font-bold">Cakupan Pekerjaan yang Termasuk</CardTitle>
-            </CardHeader>
-            <CardContent className="p-6 space-y-3 text-xs text-slate-600 dark:text-slate-300">
-              <div className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                <span>Pemeriksaan awal dan pengerjaan oleh mitra profesional.</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                <span>Penggunaan peralatan kerja lengkap dan aman sesuai standar K3.</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                <span>Pemberian penjelasan transparan mengenai estimasi biaya tambahan atau suku cadang (jika diperlukan).</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                <span>Garansi pengerjaan ulang jika masalah kembali terjadi dalam masa garansi.</span>
-              </div>
-            </CardContent>
-          </Card>
-
+          {/* Scope of Work */}
+          <ScaleIn delay={0.1}>
+            <Card className="glass-card">
+              <CardHeader>
+                <CardTitle className="text-base font-bold flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-amber-500" />
+                  <span>Cakupan Pekerjaan yang Termasuk</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 space-y-3 text-xs text-slate-600 dark:text-slate-300">
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                  <span>Pemeriksaan awal dan pengerjaan oleh mitra profesional terverifikasi KTP.</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                  <span>Penggunaan peralatan kerja lengkap dan aman sesuai standar K3.</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                  <span>Pemberian penjelasan transparan mengenai estimasi biaya tambahan atau suku cadang (jika diperlukan).</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                  <span>Garansi pengerjaan ulang gratis jika kendala kembali terjadi dalam masa garansi.</span>
+                </div>
+              </CardContent>
+            </Card>
+          </ScaleIn>
         </div>
 
         {/* Right Column: Pricing & Booking Summary */}
         <div className="space-y-6">
-          <Card className="border-brand-200 dark:border-brand-900 shadow-md">
-            <CardHeader className="bg-brand-500/5">
-              <CardTitle className="text-base font-bold text-slate-900 dark:text-white">Rincian Biaya</CardTitle>
-            </CardHeader>
-            <CardContent className="p-6 space-y-6">
-              <div>
-                <span className="text-xs text-slate-500 uppercase tracking-wider block">Skema Harga:</span>
-                <span className="text-2xl font-black text-brand-600 dark:text-brand-400 block mt-1">
-                  {service.priceFormatted}
-                </span>
-                <span className="text-[11px] text-slate-400 mt-1 block">
-                  {service.priceModel === 'FIXED_PRICE' && 'Harga pas untuk pengerjaan standar.'}
-                  {service.priceModel === 'STARTING_FROM' && 'Harga dasar, dapat disesuaikan dengan tingkat kesulitan lokasi.'}
-                  {service.priceModel === 'HOURLY' && 'Tarif dihitung per jam waktu pengerjaan.'}
-                  {service.priceModel === 'QUOTATION' && 'Biaya akhir ditentukan setelah survei lokasi oleh mitra.'}
-                </span>
-              </div>
-
-              <div className="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-800 text-xs">
-                <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
-                  <MapPin className="w-4 h-4 text-brand-500 shrink-0" />
-                  <span>Tersedia untuk wilayah <strong>{siteConfig.defaultCity}</strong> & sekitarnya</span>
+          <ScaleIn delay={0.15}>
+            <Card className="glass-card border-brand-200 dark:border-brand-900 shadow-xl">
+              <CardHeader className="bg-brand-500/5">
+                <CardTitle className="text-base font-bold text-slate-900 dark:text-white">Rincian Biaya</CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 space-y-6">
+                <div>
+                  <span className="text-xs text-slate-500 uppercase tracking-wider block">Skema Harga:</span>
+                  <span className="text-3xl font-black text-brand-600 dark:text-brand-400 block mt-1">
+                    {service.priceFormatted}
+                  </span>
+                  <span className="text-[11px] text-slate-400 mt-1 block leading-relaxed">
+                    {service.priceModel === 'FIXED_PRICE' && 'Harga pas untuk pengerjaan standar.'}
+                    {service.priceModel === 'STARTING_FROM' && 'Harga dasar, dapat disesuaikan dengan tingkat kesulitan lokasi.'}
+                    {service.priceModel === 'HOURLY' && 'Tarif dihitung per jam waktu pengerjaan.'}
+                    {service.priceModel === 'QUOTATION' && 'Biaya akhir ditentukan setelah survei lokasi oleh mitra.'}
+                  </span>
                 </div>
-                <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
-                  <Calendar className="w-4 h-4 text-brand-500 shrink-0" />
-                  <span>Pilih tanggal & jam fleksibel sesuai keinginan</span>
-                </div>
-              </div>
 
-              <Link href={`/book/create?serviceId=${service.id}`} className="block w-full">
-                <Button variant="primary" size="lg" className="w-full justify-center font-bold py-3.5">
-                  Pesan Layanan Ini Now
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
+                <div className="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-800 text-xs">
+                  <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
+                    <MapPin className="w-4 h-4 text-brand-500 shrink-0" />
+                    <span>Tersedia untuk wilayah <strong>{siteConfig.defaultCity}</strong> & sekitarnya</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
+                    <Calendar className="w-4 h-4 text-brand-500 shrink-0" />
+                    <span>Pilih tanggal & jam fleksibel sesuai keinginan</span>
+                  </div>
+                </div>
+
+                <Link href={`/book/create?serviceId=${service.id}`} className="block w-full">
+                  <Button variant="primary" size="lg" className="w-full justify-center font-bold py-3.5 shadow-lg shadow-brand-500/25">
+                    Pesan Layanan Ini Sekarang
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </ScaleIn>
         </div>
 
       </div>

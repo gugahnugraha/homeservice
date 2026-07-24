@@ -21,30 +21,35 @@
       "static/chunks/main-app.js",
       "static/chunks/app/page.js"
     ],
-    "/services/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/services/page.js"
-    ],
     "/api/categories/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/categories/route.js"
+    ],
+    "/services/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/services/page.js"
     ],
     "/api/services/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/services/route.js"
     ],
-    "/services/[slug]/page": [
+    "/book/create/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/services/[slug]/page.js"
+      "static/chunks/app/book/create/page.js"
     ],
-    "/api/services/[slug]/route": [
+    "/api/auth/me/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/services/[slug]/route.js"
+      "static/chunks/app/api/auth/me/route.js"
+    ],
+    "/api/customer/addresses/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/customer/addresses/route.js"
     ]
   }
 }
