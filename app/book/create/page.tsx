@@ -26,6 +26,7 @@ import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 import Card, { CardContent, CardHeader, CardTitle } from '../../../components/ui/Card';
 import Badge from '../../../components/ui/Badge';
+import LoadingSpinner from '../../../components/ui/LoadingSpinner';
 import { FormattedService } from '../../../lib/services/serviceCatalogService';
 import siteConfig from '../../../lib/config/site';
 
@@ -372,7 +373,7 @@ function BookingWizardContent() {
   if (loading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
-        <p className="text-slate-500 text-sm animate-pulse">Memuat formulir pemesanan...</p>
+        <LoadingSpinner size="lg" text="Memuat formulir pemesanan..." />
       </div>
     );
   }

@@ -3,7 +3,7 @@
 import React, { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Mail, Lock, Wrench } from 'lucide-react';
+import { Mail, Lock, Wrench, AlertCircle, Info } from 'lucide-react';
 import siteConfig from '../../lib/config/site';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
@@ -37,7 +37,7 @@ function LoginForm() {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || 'Login failed');
+        throw new Error(data.error || 'Login gagal. Silakan periksa email & password.');
       }
 
       const role = data.user?.role;
@@ -54,27 +54,42 @@ function LoginForm() {
 
       router.refresh();
     } catch (err: any) {
-      setError(err.message || 'An error occurred during login');
+      setError(err.message || 'Terjadi kesalahan saat masuk.');
     } finally {
       setLoading(false);
     }
   };
 
+  const registerLink = redirectPath ? `/register?redirect=${encodeURIComponent(redirectPath)}` : '/register';
+
   return (
-    <Card>
-      <CardContent className="p-6">
+    <Card className="shadow-xl border-slate-200 dark:border-slate-800">
+      <CardContent className="p-6 sm:p-8 space-y-4">
+        
+        {redirectPath && redirectPath.includes('/book') && (
+          <div className="p-4 rounded-2xl bg-brand-50 dark:bg-brand-950/60 border border-brand-200 dark:border-brand-900 text-brand-800 dark:text-brand-300 text-xs space-y-1">
+            <p className="font-bold flex items-center gap-1.5">
+              <Info className="w-4 h-4 text-brand-600 shrink-0" />
+              <span>Login Diperlukan untuk Pemesanan Jasa</span>
+            </p>
+            <p className="text-slate-600 dark:text-slate-300">
+              Silakan masuk atau buat akun baru. Setelah masuk, Anda akan otomatis diarahkan kembali untuk melanjutkan formulir pemesanan.
+            </p>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
-          
           {error && (
-            <div className="bg-rose-50 border border-rose-200 text-rose-600 text-xs p-3 rounded-xl font-medium">
-              {error}
+            <div className="bg-rose-50 border border-rose-200 text-rose-600 text-xs p-3.5 rounded-xl font-semibold flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+              <span>{error}</span>
             </div>
           )}
 
           <Input
             label="Email Address"
             type="email"
-            placeholder="e.g. user@example.com"
+            placeholder="e.g. email@domain.com"
             icon={Mail}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -84,7 +99,7 @@ function LoginForm() {
           <Input
             label="Password"
             type="password"
-            placeholder="Enter your password"
+            placeholder="Masukkan kata sandi"
             icon={Lock}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -94,24 +109,24 @@ function LoginForm() {
           <Button
             type="submit"
             variant="primary"
-            className="w-full justify-center font-semibold pt-3 pb-3"
+            className="w-full justify-center font-bold py-3.5"
             isLoading={loading}
           >
-            Log In
+            Masuk Akun
           </Button>
         </form>
 
         <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 text-center text-xs space-y-2">
-          <p className="text-slate-500">
-            Don't have an account yet?{' '}
-            <Link href="/register" className="text-brand-600 dark:text-brand-400 font-semibold hover:underline">
-              Sign Up
+          <p className="text-slate-600 dark:text-slate-400">
+            Belum memiliki akun?{' '}
+            <Link href={registerLink} className="text-brand-600 dark:text-brand-400 font-bold hover:underline">
+              Daftar Sekarang
             </Link>
           </p>
           <p className="text-slate-400">
-            Are you a Service Provider?{' '}
-            <Link href="/provider/register" className="text-brand-600 dark:text-brand-400 font-semibold hover:underline">
-              Join as Provider
+            Mitra Jasa?{' '}
+            <Link href="/provider/login" className="text-brand-600 dark:text-brand-400 font-semibold hover:underline">
+              Login Portal Mitra
             </Link>
           </p>
         </div>
@@ -135,15 +150,15 @@ export default function LoginPage() {
               {siteConfig.name}
             </span>
           </Link>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-            Log In to your Account
+          <h1 className="text-2xl font-black text-slate-900 dark:text-white">
+            Masuk ke Akun Anda
           </h1>
           <p className="text-xs text-slate-500">
-            Access your bookings, profile, or provider dashboard
+            Akses riwayat pemesanan, alamat, dan profil Anda
           </p>
         </div>
 
-        <Suspense fallback={<p className="text-center text-xs text-slate-500">Loading form...</p>}>
+        <Suspense fallback={<p className="text-center text-xs text-slate-500">Memuat formulir...</p>}>
           <LoginForm />
         </Suspense>
 

@@ -3,7 +3,7 @@ import { verifyJWT, UserSessionPayload } from './lib/auth/jwt';
 import { Role } from '@prisma/client';
 
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname, search } = request.nextUrl;
 
   const COOKIE_NAME = process.env.SESSION_COOKIE_NAME || 'homeservice_session';
   const token = request.cookies.get(COOKIE_NAME)?.value;
@@ -13,20 +13,29 @@ export async function middleware(request: NextRequest) {
     session = await verifyJWT(token);
   }
 
-  // Protecting /customer routes
-  if (pathname.startsWith('/customer')) {
+  // Protecting /book routes - Require authentication to access booking form
+  if (pathname.startsWith('/book')) {
     if (!session) {
       const loginUrl = new URL('/login', request.url);
-      loginUrl.searchParams.set('redirect', pathname);
+      loginUrl.searchParams.set('redirect', pathname + search);
       return NextResponse.redirect(loginUrl);
     }
   }
 
-  // Protecting /provider routes (except provider registration page)
-  if (pathname.startsWith('/provider') && pathname !== '/provider/register') {
+  // Protecting /customer routes
+  if (pathname.startsWith('/customer')) {
+    if (!session) {
+      const loginUrl = new URL('/login', request.url);
+      loginUrl.searchParams.set('redirect', pathname + search);
+      return NextResponse.redirect(loginUrl);
+    }
+  }
+
+  // Protecting /provider routes (except provider registration page & login)
+  if (pathname.startsWith('/provider') && pathname !== '/provider/register' && pathname !== '/provider/login') {
     if (!session || (session.role !== Role.PROVIDER && session.role !== Role.ADMIN)) {
       const loginUrl = new URL('/login', request.url);
-      loginUrl.searchParams.set('redirect', pathname);
+      loginUrl.searchParams.set('redirect', pathname + search);
       return NextResponse.redirect(loginUrl);
     }
   }
@@ -44,6 +53,7 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
+    '/book/:path*',
     '/customer/:path*',
     '/provider/:path*',
     '/admin/:path*',

@@ -1,4 +1,8 @@
 {
-  "/book/create/page": "app/book/create/page.js",
-  "/admin/dashboard/page": "app/admin/dashboard/page.js"
+  "/api/categories/route": "app/api/categories/route.js",
+  "/api/services/route": "app/api/services/route.js",
+  "/api/services/[slug]/route": "app/api/services/[slug]/route.js",
+  "/page": "app/page.js",
+  "/services/page": "app/services/page.js",
+  "/services/[slug]/page": "app/services/[slug]/page.js"
 }
