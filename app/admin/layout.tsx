@@ -63,6 +63,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const navigation = [
     { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
     { name: 'Verifikasi Mitra', href: '/admin/verifications', icon: ShieldCheck },
+    { name: 'Kategori Layanan', href: '/admin/categories', icon: ShieldCheck },
+    { name: 'Layanan Jasa', href: '/admin/services', icon: Settings },
+    { name: 'Sengketa Pesanan', href: '/admin/disputes', icon: ShieldCheck },
     { name: 'Pengaturan Global', href: '/admin/settings', icon: Settings },
   ];
 

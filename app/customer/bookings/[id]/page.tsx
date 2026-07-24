@@ -279,6 +279,14 @@ export default function BookingTrackingPage() {
                 </Badge>
               </div>
 
+              {booking.paymentStatus === 'PAID' && (
+                <Link href={`/customer/bookings/${booking.id}/invoice`} className="block w-full">
+                  <Button variant="outline" size="sm" className="w-full justify-center text-xs">
+                    📄 Lihat Faktur / Kwitansi
+                  </Button>
+                </Link>
+              )}
+
               {/* Payment Action */}
               {['COMPLETED', 'CUSTOMER_CONFIRMED'].includes(booking.bookingStatus) && booking.paymentStatus !== 'PAID' && (
                 <div className="pt-4 border-t border-slate-100 dark:border-slate-800">

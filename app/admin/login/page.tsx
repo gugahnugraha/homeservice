@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Shield, Mail, Lock, Wrench } from 'lucide-react';
+import { Shield, Mail, Lock, Loader2 } from 'lucide-react';
 import siteConfig from '../../../lib/config/site';
 import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
@@ -16,6 +16,26 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
+
+  // Auto-redirect if active admin session exists in cookie
+  useEffect(() => {
+    checkActiveSession();
+  }, []);
+
+  const checkActiveSession = async () => {
+    try {
+      const res = await fetch('/api/auth/me');
+      const data = await res.json();
+      if (data.authenticated && data.user?.role === 'ADMIN') {
+        router.push('/admin/dashboard');
+      } else {
+        setCheckingSession(false);
+      }
+    } catch (err) {
+      setCheckingSession(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,17 +56,28 @@ export default function AdminLoginPage() {
       }
 
       if (data.user?.role !== 'ADMIN') {
-        throw new Error('Access denied. Administrator privileges required.');
+        throw new Error('Akses ditolak. Peran Anda bukan Administrator.');
       }
 
       router.push('/admin/dashboard');
       router.refresh();
     } catch (err: any) {
-      setError(err.message || 'An error occurred during admin authentication');
+      setError(err.message || 'Terjadi kesalahan saat verifikasi admin.');
     } finally {
       setLoading(false);
     }
   };
+
+  if (checkingSession) {
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3 text-slate-500">
+          <Loader2 className="w-8 h-8 animate-spin text-brand-500" />
+          <p className="text-xs font-semibold">Memeriksa sesi aktif Admin...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
@@ -58,10 +89,10 @@ export default function AdminLoginPage() {
             <Shield className="w-6 h-6 text-brand-400" />
           </div>
           <h1 className="text-2xl font-black text-slate-900 dark:text-white">
-            Platform Admin Portal
+            Portal Admin Platform
           </h1>
           <p className="text-xs text-slate-500">
-            Authorized administrative personnel only
+            Akses khusus tim administrator {siteConfig.name}
           </p>
         </div>
 
@@ -77,9 +108,9 @@ export default function AdminLoginPage() {
               )}
 
               <Input
-                label="Admin Email"
+                label="Email Admin"
                 type="email"
-                placeholder="admin@example.com"
+                placeholder="admin@domain.com"
                 icon={Mail}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -87,9 +118,9 @@ export default function AdminLoginPage() {
               />
 
               <Input
-                label="Admin Password"
+                label="Kata Sandi"
                 type="password"
-                placeholder="Enter admin password"
+                placeholder="••••••••"
                 icon={Lock}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -102,13 +133,13 @@ export default function AdminLoginPage() {
                 className="w-full justify-center font-bold pt-3 pb-3"
                 isLoading={loading}
               >
-                Authenticate Admin Access
+                Masuk Dasbor Admin
               </Button>
             </form>
 
             <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 text-center text-xs">
               <Link href="/" className="text-slate-500 hover:text-slate-900 dark:hover:text-white">
-                ← Return to Public Homepage
+                ← Kembali ke Beranda Utama
               </Link>
             </div>
           </CardContent>

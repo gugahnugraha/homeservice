@@ -17,7 +17,11 @@ import {
   Star,
   CheckCircle2,
   ArrowRight,
-  Tag
+  Tag,
+  Baby,
+  HeartHandshake,
+  Utensils,
+  Dog
 } from 'lucide-react';
 import siteConfig from '../lib/config/site';
 import Button from '../components/ui/Button';
@@ -51,6 +55,38 @@ export default function HomePage() {
   const { t } = useLanguage();
 
   const categories: CategoryItem[] = [
+    {
+      id: 'childcare',
+      name: 'Baby Sitter & Childcare',
+      icon: Baby,
+      color: 'bg-pink-500/10 text-pink-600 dark:text-pink-400 border-pink-200',
+      description: 'Baby sitter harian, nanny & perawatan newborn',
+      count: '6 Services'
+    },
+    {
+      id: 'elderly-care',
+      name: 'Perawatan Lansia',
+      icon: HeartHandshake,
+      color: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-200',
+      description: 'Pendamping lansia harian & home care nurse',
+      count: '4 Services'
+    },
+    {
+      id: 'home-cook',
+      name: 'Masak & Asisten Dapur',
+      icon: Utensils,
+      color: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-200',
+      description: 'Jasa koki harian & meal prep keluarga',
+      count: '5 Services'
+    },
+    {
+      id: 'pet-care',
+      name: 'Pet Care & Grooming',
+      icon: Dog,
+      color: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-200',
+      description: 'Grooming anjing & kucing panggilan rumah',
+      count: '3 Services'
+    },
     {
       id: 'cleaning',
       name: 'House Cleaning',

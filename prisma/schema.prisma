@@ -255,6 +255,7 @@ model Booking {
   statusHistory BookingStatusHistory[]
   payments      Payment[]
   review        Review?
+  disputes      Dispute[]
 
   @@index([customerId])
   @@index([providerId])
@@ -345,4 +346,22 @@ model PlatformSetting {
   value       String
   description String?
   updatedAt   DateTime @updatedAt
+}
+
+model Dispute {
+  id           String   @id @default(uuid())
+  bookingId    String
+  booking      Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  reporterId   String
+  reporterRole Role     @default(CUSTOMER)
+  reason       String
+  description  String
+  status       String   @default("OPEN") // OPEN, IN_REVIEW, RESOLVED, REJECTED
+  adminNotes   String?
+  resolution   String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([bookingId])
+  @@index([status])
 }

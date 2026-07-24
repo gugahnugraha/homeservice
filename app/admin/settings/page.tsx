@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Card, { CardContent, CardHeader, CardTitle } from '../../../components/ui/Card';
-import Button from '../../../components/ui/Button';
-import { Settings, Save, AlertCircle } from 'lucide-react';
+import Card, { CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import Button from '@/components/ui/Button';
+import { Settings, Save, CheckCircle2 } from 'lucide-react';
 
 export default function AdminSettingsPage() {
   const [settings, setSettings] = useState<any[]>([]);
@@ -11,11 +11,11 @@ export default function AdminSettingsPage() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
 
-  // Default structure for settings to display if not in DB yet
   const defaultKeys = [
     { key: 'platform_commission_rate', value: '0.15', description: 'Persentase komisi platform (misal 0.15 untuk 15%)' },
-    { key: 'platform_name', value: 'HomeFix', description: 'Nama platform publik' },
-    { key: 'support_email', value: 'support@homefix.com', description: 'Email dukungan pelanggan' },
+    { key: 'platform_name', value: 'HomeFix Marketplace', description: 'Nama platform publik' },
+    { key: 'support_email', value: 'support@homefix.local', description: 'Email dukungan pelanggan' },
+    { key: 'default_city', value: 'Bandung', description: 'Kota default lokasi layanan' },
   ];
 
   useEffect(() => {
@@ -27,11 +27,10 @@ export default function AdminSettingsPage() {
       setLoading(true);
       const res = await fetch('/api/admin/settings');
       const json = await res.json();
-      
+
       if (json.success) {
-        // Merge fetched settings with defaults if they don't exist
-        const merged = defaultKeys.map(dk => {
-          const found = json.settings.find((s: any) => s.key === dk.key);
+        const merged = defaultKeys.map((dk) => {
+          const found = json.settings?.find((s: any) => s.key === dk.key);
           return found || dk;
         });
         setSettings(merged);
@@ -44,7 +43,7 @@ export default function AdminSettingsPage() {
   };
 
   const handleChange = (key: string, value: string) => {
-    setSettings(prev => prev.map(s => s.key === key ? { ...s, value } : s));
+    setSettings((prev) => prev.map((s) => (s.key === key ? { ...s, value } : s)));
   };
 
   const handleSave = async (setting: any) => {
@@ -78,13 +77,13 @@ export default function AdminSettingsPage() {
   return (
     <div className="space-y-8 max-w-4xl">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Pengaturan Global</h1>
-        <p className="text-sm text-slate-500">Atur variabel utama platform tanpa perlu deploy ulang kode.</p>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Pengaturan Global Platform</h1>
+        <p className="text-sm text-slate-500">Atur variabel utama platform (komisi, nama brand, kota default) secara dinamis.</p>
       </div>
 
       {message && (
         <div className="bg-emerald-50 border border-emerald-200 text-emerald-700 p-4 rounded-xl flex items-center gap-2 text-sm font-medium">
-          <CheckCircle2 className="w-5 h-5" />
+          <CheckCircle2 className="w-5 h-5 text-emerald-600" />
           {message}
         </div>
       )}
@@ -109,10 +108,10 @@ export default function AdminSettingsPage() {
                 />
               </div>
               <div className="sm:mt-8">
-                <Button 
-                  variant="primary" 
-                  size="sm" 
-                  disabled={saving} 
+                <Button
+                  variant="primary"
+                  size="sm"
+                  disabled={saving}
                   onClick={() => handleSave(setting)}
                   className="w-full sm:w-auto"
                 >
@@ -124,14 +123,5 @@ export default function AdminSettingsPage() {
         </CardContent>
       </Card>
     </div>
-  );
-}
-
-// Inline icon since CheckCircle2 is missing in imports above
-function CheckCircle2(props: any) {
-  return (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>
-    </svg>
   );
 }

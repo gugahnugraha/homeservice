@@ -33,7 +33,7 @@ export const siteConfig: SiteConfig = {
   tagline: process.env.NEXT_PUBLIC_APP_TAGLINE || "Solusi Jasa Rumah Tangga, Perbaikan & Perawatan Terpercaya",
   description: "Pesan jasa profesional, mitra ahli listrik, jasa pembersih rumah, pengasuh anak, dan mitra terverifikasi lainnya dalam hitungan detik dengan harga transparan dan garansi kepuasan.",
   url: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
-  defaultCity: process.env.NEXT_PUBLIC_DEFAULT_CITY || "Jakarta",
+  defaultCity: process.env.NEXT_PUBLIC_DEFAULT_CITY || "Bandung",
   
   defaultCommissionRate: parseFloat(process.env.NEXT_PUBLIC_DEFAULT_COMMISSION_RATE || "0.15"),
   currencySymbol: "Rp",
